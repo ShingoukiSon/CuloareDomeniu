@@ -79,14 +79,24 @@ CImg<unsigned char> ColoreazaDomeniu(CImg<unsigned char>& in, Pozitie init, unsi
     while(!isEmpty(c))
     {
         p:=get(C);
-
-        for (pi := p)
+        for (pi.x=p.x-1;pi.x<=p.x+1;pi.x++)
         {
-            if(pi=culoareDomeniu && (pi.x >=0 && pi.y>=0) && (pi.x<=in.width() && pi.y<=in.height()))
-            {
-                put(c,pi);
-                Coloreaza(pi);
-            }
+            if(pi.x==p.x)
+                for (pi.y=p.y-1;pi.y<=p.y+1;pi.y=pi.y+2)
+                    if(pi=culoareDomeniu && (pi.x >=0 && pi.y>=0) && (pi.x<=in.width() && pi.y<=in.height()))
+                    {
+                        put(c,pi);
+                        Coloreaza(pi);
+                    }
+            else
+                 {
+                    pi.y=p.y;
+                    if(pi=culoareDomeniu && (pi.x >=0 && pi.y>=0) && (pi.x<=in.width() && pi.y<=in.height()))
+                    {
+                        put(c,pi);
+                        Coloreaza(pi);
+                    }
+                }
         }
     }
     cout << "DONE!" << endl;
