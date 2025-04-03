@@ -57,6 +57,13 @@ Atom get(Queue &q)
         q.tail=0;
     
 }
+Atom front(Queue q)
+{
+    if(!isEmpty(q))
+        return q.head->data;
+    else
+        return 0;
+}
 CImg<unsigned char> Coloreaza(Pozitie &p) 
 {
     p.x;
