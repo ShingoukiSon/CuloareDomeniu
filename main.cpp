@@ -52,7 +52,6 @@ Atom get(Queue &q)
     Element *p=new Element;
     p=q.head;
     q.head=q.head->succ;
-    return p->data;
     delete p;
     if(q.head==0)
         q.tail=0;
@@ -78,7 +77,8 @@ CImg<unsigned char> ColoreazaDomeniu(CImg<unsigned char>& in, Pozitie init, unsi
     Pozitie p,pi;
     while(!isEmpty(c))
     {
-        p:=get(C);
+        p=front(c);
+        get(c);
         for (pi.x=p.x-1;pi.x<=p.x+1;pi.x++)
         {
             if(pi.x==p.x)
