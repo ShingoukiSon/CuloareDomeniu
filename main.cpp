@@ -47,7 +47,7 @@ bool isEmpty(Queue q)
     return q.head==0;
 }
 
-Atom get(Queue &q)
+void get(Queue &q)
 {
     Element *p=new Element;
     p=q.head;
@@ -59,15 +59,11 @@ Atom get(Queue &q)
 }
 Atom front(Queue q)
 {
-    if(!isEmpty(q))
         return q.head->data;
-    else
-        return 0;
 }
-CImg<unsigned char> Coloreaza(Pozitie &p) 
+void Coloreaza(Pozitie pi, CImg<unsigned char> &imgOut) 
 {
-    p.x;
-    p.y;
+    imgOut(pi.x,pi.y)=0;
 }
 
 CImg<unsigned char> ColoreazaDomeniu(CImg<unsigned char>& in, Pozitie init, unsigned char color, CImgDisplay& dispOut, Queue c) {
@@ -78,33 +74,31 @@ CImg<unsigned char> ColoreazaDomeniu(CImg<unsigned char>& in, Pozitie init, unsi
     int height = in.height();
 
     unsigned char culoareDomeniu = in(init.x, init.y); // obtinem valoarea pixelului de la pozitia initiala
-    cout << "Color: " << (unsigned int)culoareDomeniu << "( " << init.x << ", " << init.y << ")" << endl;
+    cout << "Color: " << (unsigned int)culoareDomeniu << " (" << init.x << ", " << init.y << ")" << endl;
     initD(c);
     put(c,init);
+    Coloreaza(init,imgOut);
     Pozitie p,pi;
     while(!isEmpty(c))
     {
         p=front(c);
         get(c);
-        for (pi.x=p.x-1;pi.x<=p.x+1;pi.x++)
+        for (int d = 0; d < 4; ++d) 
         {
-            if(pi.x==p.x)
-                for (pi.y=p.y-1;pi.y<=p.y+1;pi.y=pi.y+2)
-                    if(pi=culoareDomeniu && (pi.x >=0 && pi.y>=0) && (pi.x<=in.width() && pi.y<=in.height()))
-                    {
-                        put(c,pi);
-                        Coloreaza(pi);
-                    }
-            else
-                 {
-                    pi.y=p.y;
-                    if(pi=culoareDomeniu && (pi.x >=0 && pi.y>=0) && (pi.x<=in.width() && pi.y<=in.height()))
-                    {
-                        put(c,pi);
-                        Coloreaza(pi);
-                    }
-                }
+            pi.x = p.x + directii[d].x;
+            pi.y = p.y + directii[d].y;
+        
+            if (pi.x >= 0 && pi.x < width && pi.y >= 0 && pi.y < height && imgOut(pi.x, pi.y) == culoareDomeniu) 
+            {
+                put(c, pi);
+                Coloreaza(pi, imgOut);
+                /*dispOut = CImgDisplay(imgOut, "Output");
+                 while (!dispOut.is_closed()) {
+                    dispOut.wait();
+                        }*/
+            }
         }
+        
     }
     cout << "DONE!" << endl;
     return imgOut;
@@ -112,7 +106,7 @@ CImg<unsigned char> ColoreazaDomeniu(CImg<unsigned char>& in, Pozitie init, unsi
 
 
 int main() {
-    CImg<unsigned char> imgIn("C:/Users/SebyP/Desktop/Faculta/Anul 1/Sem2/Structuri de date/Colorare/img.jpg"); // Incarca imaginea, de specificat calea completa
+    CImg<unsigned char> imgIn("C:\\Users\\SebyP\\Desktop\\Faculta\\Anul 1\\Sem2\\Structuri de date\\Colorare\\img.bmp"); // Incarca imaginea, de specificat calea completa
 
     // Creati o fereastra pentru a vizualiza imaginile
     CImgDisplay dispIn(imgIn, "Input");
